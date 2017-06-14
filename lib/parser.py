@@ -10,6 +10,9 @@ import itertools as it
 class Parser(object):
 
 	def __init__(self):
+		"""
+		Initializer. Initializes instance variables that will be filled later by the parse_file method
+		"""
 		self.parsed = False
 		self.schema =  'schema.xsd'
 		self.predictors = []
@@ -22,7 +25,7 @@ class Parser(object):
 		Method parses an xml file given a path. It sets instance variables
 		to be accessible via getters.
 
-		:param str file_path
+		:param str file_path: path of the file to be parsed
 		"""
 		root = ET.parse(file_path).getroot()
 		## parse predictors
@@ -56,30 +59,75 @@ class Parser(object):
 		self.plotting_file_name = root.find('Plotting').find('Plot').find('filename').text
 
 	def get_splits(self):
+		"""
+		Getter method for the number of folds.
+		:returns: Number of folds
+		:rtype: float
+		"""
 		return self.k
 
 	def get_plotting_file_name(self):
+		"""
+		Getter method for plotting file name.
+		:returns: Name of the file
+		:rtype: str
+		"""
 		return self.plotting_file_name
 
 	def get_evaluation_metric(self):
+		"""
+		Getter method for evaluation metric used
+		:returns: Evaluation metric
+		:rtype: str
+		"""
 		return self.metric
 
 	def get_partition_rate(self):
-		return self.data_split
+		"""
+		Getter method for partition rate.
+		:returns: Partition rate
+		:rtype: float
+		"""
+		return float(self.data_split)
 
 	def get_preprocessing_methods(self):
+		"""
+		Getter method for preprocessing methods
+		:returns: array of preprocessing methods
+		:rtype: list(str)
+		"""
 		return self.preprocessing_methods
 
 	def get_method_name(self):
+		"""
+		Getter method for learning method name
+		:returns: learning method name
+		"rtype: str
+		"""
 		return self.method_name
 
 	def get_predictors_types(self):
+		"""
+		Getter method for types of predictors
+		:returns: array of types
+		:rtype: list(str)
+		"""
 		return self.predictors_types
 
 	def get_predictors(self):
+		"""
+		Getter method for predictor names
+		:returns: Array of predictor names
+		:rtype: list(str)
+		"""
 		return self.predictors
 
 	def get_variables(self):
+		"""
+		Getter method for all model variables
+		:returns: A hash with variable(key) and values
+		:rtype: hash(str -> list(float))
+		"""
 		return self.variables
 	
 	def get_all_combinations(self, hash_set):
@@ -98,6 +146,15 @@ class Parser(object):
 		*(hash_set[name] for name in names))]
 
 	def validate(self, xmlfilename, xsdfilename):
+		"""
+		Method validates if the xml file follows the schema
+
+		:param str xmlfilename: path of the xml file to be parsed
+		:param str xsdfilename: path of the xsd file
+
+		:returns: Whether the file could be parsed or not
+		:rtype: bool
+		"""
 		data = open(xsdfilename, 'rb') 
 		schema_root = etree.XML(data.read())
 		schema = etree.XMLSchema(schema_root)
@@ -113,6 +170,9 @@ class Parser(object):
 			return False
 
 	def _to_str(self):
+		"""
+		Method prints out the instance variables of the parser
+		"""
 		print("predictors: {}, types: {} \n method: {}, preprocessing: {}\
 			  \n partition_rate: {}, metric: {}, file name: {}".format(
 			  self.predictors, self.predictors_types, self.method_name,

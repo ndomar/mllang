@@ -15,6 +15,15 @@ import numpy as np
 class TaskExecuter(object):
 
 	def __init__(self, filename, data, labels):
+		"""
+		Initializer for the task executer, the Initializer tries to run the machine learning method
+		described in the given file on the given data
+
+		:param str filename: path to the xml file
+		:param ndarray data: numpy array of train and test data
+		:param ndarray labels: numpy array of labels
+		"""
+
 		self.data = data
 		self.labels = labels
 		self.filename = filename
@@ -60,6 +69,9 @@ class TaskExecuter(object):
 	def split(self):
 		"""
 		Function that splits the data into train and test
+
+		:returns: quadruple of train data, labels, test data, and labels
+		:rtype: list(ndarray)
 		"""
 
 		partition_rate = self.parser.get_partition_rate()
@@ -68,6 +80,9 @@ class TaskExecuter(object):
 	def train(self):
 		"""
 		Function that trains the model
+
+		:returns: tuple of ndarrays first predictions, and second is scores
+		:rtype: tuple(ndarray)
 		"""
 
 		method = self.parser.get_method_name()
@@ -87,6 +102,14 @@ class TaskExecuter(object):
 		
 
 	def evaluate(self, labels, scores):
+		"""
+		Method that evaluates the trained model
+		:param ndarray labels: numpy array of the labels
+		:param ndarray scores: numpy array of he predicted scores
+
+		:returns: numpy array of metrics depending on the xml file
+		:rtype: ndarray
+		"""
 		results = []
 		metric = self.parser.get_evaluation_metric()
 		if metric == 'Accuracy' or metric == 'automatic':
@@ -127,6 +150,12 @@ class TaskExecuter(object):
 			return results
 
 	def _train_svm(self):
+		"""
+		Method only used internally to train a specific model
+
+		:returns: tuple of numpy arrays containing predictions and scores.
+		:rtype: tuple(ndarray)
+		"""
 		from sklearn.svm import LinearSVC
 		for experiment in self.experiments:
 			model = LinearSVC(C=experiment['cost'])
@@ -136,6 +165,12 @@ class TaskExecuter(object):
 		return predictions, scores
 
 	def _train_random_forest(self):
+		"""
+		Method only used internally to train a specific model
+
+		:returns: tuple of numpy arrays containing predictions and scores.
+		:rtype: tuple(ndarray)
+		"""
 		from sklearn.ensemble import RandomForestClassifier
 		for experiment in self.experiments:
 			print(experiment)
@@ -146,6 +181,12 @@ class TaskExecuter(object):
 		return predictions, scores
 
 	def _train_linear_regression(self):
+		"""
+		Method only used internally to train a specific model
+
+		:returns: tuple of numpy arrays containing predictions and scores.
+		:rtype: tuple(ndarray)
+		"""
 		from sklearn.linear_model import LinearRegression
 		print(self.experiments)
 		for experiment in self.experiments:
@@ -157,6 +198,12 @@ class TaskExecuter(object):
 		return predictions, scores
 
 	def _train_CART(self):
+		"""
+		Method only used internally to train a specific model
+
+		:returns: tuple of numpy arrays containing predictions and scores.
+		:rtype: tuple(ndarray)
+		"""
 		from sklearn.tree import DecisionTreeClassifier
 		model = DecisionTreeClassifier()
 		model.fit(self.train_data, self.train_labels)
@@ -165,6 +212,12 @@ class TaskExecuter(object):
 		return predictions, scores
 
 	def _train_multilayer_perceptorn(self):
+		"""
+		Method only used internally to train a specific model
+
+		:returns: tuple of numpy arrays containing predictions and scores.
+		:rtype: tuple(ndarray)
+		"""
 		from sklearn.neural_network import MLPClassifier
 		first_value = None
 		for experiment in self.experiments:
@@ -180,6 +233,12 @@ class TaskExecuter(object):
 		return predictions, scores
 	
 	def _train_gradient_boosting(self):
+		"""
+		Method only used internally to train a specific model
+
+		:returns: tuple of numpy arrays containing predictions and scores.
+		:rtype: tuple(ndarray)
+		"""
 		from sklearn.ensemble import GradientBoostingClassifier
 		print(self.experiments)
 		for experiment in self.experiments:
