@@ -101,8 +101,8 @@ XML syntax of the Unified Machine Learning Language
 ``` python
 parser = Parser()
 parser.validate(xml_input)
-#>XML file was parsed without errors
-#>True
+#> XML file was parsed without errors
+#> True
 ```
 
 License
